@@ -1,0 +1,12 @@
+include includes/header.pug
+body
+    h1 Movie Genres
+    each genre in genres
+        h2 #{genre.genreName} (#{genre.genreMovieCount} in total)
+        .movies
+            each movie in genre.genreMovies
+                .movie(style="display:inline-block;text-align:center;margin:10px")
+                    img(src=`https://image.tmdb.org/t/p/w500${movie.posterPath}`, alt=movie.title, width="150")
+                    p #{movie.title}
+            .button(style="display:inline-block;")
+                button(id= `${genre.genreId}`) View more
