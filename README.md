@@ -33,21 +33,21 @@ This project is a movie browsing web application that demonstrates how to fetch 
 
 ## 🗂 Project Structure
 
+```bash
 movie-website/
 │
-├── app.js                     # Express server
-├── appMethods.js              # API calls and helper methods
-├── .env                       # API token (ignored by Git)
-├── .env.example               # Environment variable template
-├── package.json               # Project metadata and scripts
+├── app.js                     
+├── appMethods.js              
+├── .env                       
+├── package.json               
 │
-├── views/                     # Pug templates
-│   ├── index.pug              # Frontpage with genres
-│   ├── movieInfo.pug          # Detailed movie info
+├── views/                     
+│   ├── index.pug              
+│   ├── movieInfo.pug          
 │   └── includes/
-│       └── header.pug         # Shared HTML head
+│       └── header.pug         
 │
-├── assets/                    # Static assets
+├── assets/                    
 │   ├── js/
 │   │   ├── index.js
 │   │   └── movieInfo.js
@@ -56,6 +56,7 @@ movie-website/
 │       └── movieInfo.css
 │
 └── README.md       
+```
 
 ---
 
