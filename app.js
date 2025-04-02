@@ -1,5 +1,4 @@
 const express = require('express');
-//const fetch = require('node-fetch');
 const path = require('path');
 const appMethods = require('./appMethods.js')
 
@@ -8,7 +7,7 @@ const PORT = 8000;
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'assets')));
 
 
 
@@ -18,13 +17,25 @@ app.get('/', async (req, res) => {
     res.render('index', {
       title: 'Frontpage',
       genres: genresWithMovies,
-      script: '/js/index2.js',
+      script: '/js/index.js',
       cssFile: '/css/frontpage.css'
     });
   } catch (error) {
     console.error("Failed to fetch from TMDB:", error);
     res.status(500).send("Internal Server Error");
   }
+});
+
+app.get('/movieInfo', async (req, res) => {
+  const movieId = req.query.id;
+  const movieInfo = await appMethods.getMovieInfo(movieId)
+
+  res.render('movieInfo', {
+      title: 'Movie Info', 
+      script: '/js/movieInfo.js', 
+      cssFil: '/css/movieInfo.css',
+      movieInfo: movieInfo
+  })
 });
 
 

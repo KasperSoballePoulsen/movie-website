@@ -1,0 +1,11 @@
+include includes/header.pug
+body(style='background-image: url("https://image.tmdb.org/t/p/original' + movieInfo.backdropPath + '"); background-size: cover; background-position: center; color: white; padding: 2rem;')
+    h1 #{movieInfo.title}
+    h2 Description
+    p #{movieInfo.description}
+    p Release year: #{movieInfo.releaseYear}
+    p Genres: #{movieInfo.genreNames}
+    p Directors: #{movieInfo.directors}
+    p Actors: #{movieInfo.actors}
+
+

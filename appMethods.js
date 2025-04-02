@@ -65,12 +65,75 @@ async function getGenresWithMovies() {
         genreMovieCount: movieCount,
         genreMovies: movies.map(movie => ({
           title: movie.title,
-          posterPath: movie.poster_path
+          posterPath: movie.poster_path,
+          movieId: movie.id
         }))
       });
     }
     return result;
-  }
+}
+
+
+async function getMovieInfo(movieId) {
+    const url = `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`
+    try {
+        const res = await fetch(url, fetchOptionsGet)
+        const data = await res.json()
+
+        const releaseYear = data.release_date.split("-")[0]
+
+        const genreNames = data.genres.map(genre => genre.name).join(", ") + ".";
+
+        const actorsAndDirectors = await getActorsAndDirector(movieId)
+
+        const movieInfo = {
+            title: data.title,
+            backdropPath: data.backdrop_path,
+            description: data.overview,
+            releaseYear: releaseYear,
+            genreNames: genreNames,
+            cover: data.poster_path,
+            actors: actorsAndDirectors.actors,
+            directors: actorsAndDirectors.directors
+        }
+        return movieInfo
+    } catch (err) {
+        console.error("Error fetching genres:", err);
+        return null
+    }
+
+
+}
+
+async function getActorsAndDirector(movieId) {
+    const url = `https://api.themoviedb.org/3/movie/${movieId}/credits`
+    try {
+        const res = await fetch(url, fetchOptionsGet)
+        const data = await res.json()
+
+        const directors = data.crew
+            .filter(person => person.job === "Director")
+            .map(director => director.name)
+            .join(", ") + ".";
+
+        const actors = data.cast
+            .map(actor => actor.name)
+            .join(", ") + ".";
+
+
+        const actorsAndDirectors = {
+            directors: directors,
+            actors: actors
+        }
+        
+        return actorsAndDirectors
+    } catch (err) {
+        console.error("Error fetching genres:", err);
+        return null
+    }
+
+
+}
 
 
 
@@ -78,5 +141,6 @@ module.exports = {
     getGenres,
     getMovies,
     getMovieCount,
-    getGenresWithMovies
+    getGenresWithMovies,
+    getMovieInfo
 }

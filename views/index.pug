@@ -2,11 +2,11 @@ include includes/header.pug
 body
     h1 Movie Genres
     each genre in genres
-        h2 #{genre.genreName} (#{genre.genreMovieCount} in total)
+        h2 #{genre.genreName} (#{genre.genreMovieCount} movies in total)
+        button.button(id=`viewAllMovies${genre.genreId}` style="display:inline-block;") View all movies
         .movies
             each movie in genre.genreMovies
-                .movie(style="display:inline-block;text-align:center;margin:10px")
+                .movie(style="display:inline-block;text-align:center;margin:10px" id=`${movie.movieId}`)
                     img(src=`https://image.tmdb.org/t/p/w500${movie.posterPath}`, alt=movie.title, width="150")
                     p #{movie.title}
-            .button(style="display:inline-block;")
-                button(id= `${genre.genreId}`) View more
+            button.button(id=`loadMoreMovies${genre.genreId}` style="display:inline-block;") Load more movies
