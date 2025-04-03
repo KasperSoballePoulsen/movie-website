@@ -17,7 +17,7 @@ app.get('/', async (req, res) => {
     res.render('index', {
       title: 'Frontpage',
       genres: genresWithMovies,
-      script: '/js/index.js',
+      scripts: ['/js/index.js', '/js/sharedUtils.js'],
       cssFile: '/css/frontpage.css'
     });
   } catch (error) {
@@ -32,9 +32,29 @@ app.get('/movieInfo', async (req, res) => {
 
   res.render('movieInfo', {
       title: 'Movie Info', 
-      script: '/js/movieInfo.js', 
+      scripts: ['/js/movieInfo.js'], 
       cssFil: '/css/movieInfo.css',
       movieInfo: movieInfo
+  })
+});
+
+app.get('/genreMovie', async (req, res) => {
+  const genreId = req.query.id;
+  const genreName = req.query.name
+  const moviesWithCount = await appMethods.getMoviesWithCount(genreId, 20)
+
+  const genre = {
+    genreId: genreId,
+    genreName: genreName
+  }
+
+  res.render('genreMovie', {
+      title: 'Movies By Genre', 
+      scripts: ['/js/sharedUtils.js'], 
+      cssFil: '/css/',
+      movies: moviesWithCount.movies,
+      movieCount: moviesWithCount.movieCount,
+      genre: genre
   })
 });
 
@@ -45,19 +65,3 @@ app.listen(PORT, () => {
 });
 
 
-
-
-
-
-
-
-/*app.get('/movie/:id', async (req, res) => {
-  const movieId = req.params.id;
-
-  const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?language=en-US`, {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: 'Bearer YOUR_API_KEY_HERE'
-    }
-  });*/

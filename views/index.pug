@@ -1,12 +1,24 @@
 include includes/header.pug
 body
-    h1 Movie Genres
+    h1 Movies
     each genre in genres
-        h2 #{genre.genreName} (#{genre.genreMovieCount} movies in total)
-        button.button(id=`viewAllMovies${genre.genreId}` style="display:inline-block;") View all movies
+        .genre-header
+            h2 #{genre.genreName} (#{genre.genreMovieCount} movies in total)
+            button.button.viewAllMoviesButton(id=`viewAllMovies${genre.genreId}` name=`${genre.genreName}`) View all movies
+        
+        - const half = Math.ceil(genre.genreMovies.length / 2)
+        - const firstHalf = genre.genreMovies.slice(0, half)
+        - const secondHalf = genre.genreMovies.slice(half)
+
         .movies
-            each movie in genre.genreMovies
-                .movie(style="display:inline-block;text-align:center;margin:10px" id=`${movie.movieId}`)
-                    img(src=`https://image.tmdb.org/t/p/w500${movie.posterPath}`, alt=movie.title, width="150")
+            each movie in firstHalf
+                .movie(id=`${movie.movieId}`)
+                    img(src=`https://image.tmdb.org/t/p/w500${movie.posterPath}`, alt=movie.title)
                     p #{movie.title}
-            button.button(id=`loadMoreMovies${genre.genreId}` style="display:inline-block;") Load more movies
+        .secondRowMovies    
+            // Second half, initially hidden
+            each movie in secondHalf
+                .movie.hidden(data-genre-id=`${genre.genreId}` id=`${movie.movieId}`)
+                    img(src=`https://image.tmdb.org/t/p/w500${movie.posterPath}`, alt=movie.title)
+                    p #{movie.title}
+            button.button.loadMoreButton(id=`loadMoreMovies${genre.genreId}` data-genre-id=`${genre.genreId}`) Load more movies

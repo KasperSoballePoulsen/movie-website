@@ -7,5 +7,7 @@ body(style='background-image: url("https://image.tmdb.org/t/p/original' + movieI
     p Genres: #{movieInfo.genreNames}
     p Directors: #{movieInfo.directors}
     p Actors: #{movieInfo.actors}
+    img(src=`https://image.tmdb.org/t/p/w500${movieInfo.posterPath}`, alt=`Cover of ${movieInfo.title}`, width="150")
+    button.button Save To Wishlist
 
 

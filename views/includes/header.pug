@@ -1,6 +1,7 @@
-html 
-    head 
+html
+    head
         title= title
         meta(charset="UTF-8")
-        script(src=script defer)
+        each script in scripts
+            script(src=script, defer)
         link(rel="stylesheet", type="text/css", href=cssFile)

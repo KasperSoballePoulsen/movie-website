@@ -24,51 +24,50 @@ async function getGenres() {
     }
 }
 
-async function getMovies(genreId, amount = 5) {
+async function getMoviesWithCount(genreId, amount = 10) {
     const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=${genreId}`;
     try {
         const res = await fetch(url, fetchOptionsGet);
+        
         const data = await res.json();
-        const movies = data.results.slice(0, amount);
-        return movies 
+        let movies = data.results.slice(0, amount);
+        
+        movies = movies.map(movie => ({
+            title: movie.title,
+            posterPath: movie.poster_path,
+            movieId: movie.id
+        }))
+
+        const moviesWithCount = {
+            movies: movies,
+            movieCount: data.total_results
+        }
+
+        
+        return moviesWithCount 
     } catch (err) {
         console.error("Error fetching genres:", err);
         return null
     }     
 }
 
-//Henter antal film for en bestemt genre fra api'et
-async function getMovieCount(genreId) {
-    const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=${genreId}`
-    try {
-        const res = await fetch(url, fetchOptionsGet)
-        const data = await res.json()
-        return data.total_results
-    } catch (err) {
-        console.error("Error fetching genres:", err);
-        return null
-    }
-}
-
-
 
 async function getGenresWithMovies() {
     const genres = await getGenres();
+    
     const result = [];
     for (const genre of genres) {
-      const movieCount = await getMovieCount(genre.id);
-      const movies = await getMovies(genre.id);
+      
+      
+      const moviesWithCount = await getMoviesWithCount(genre.id);
   
       result.push({
         genreName: genre.name,
         genreId: genre.id,
-        genreMovieCount: movieCount,
-        genreMovies: movies.map(movie => ({
-          title: movie.title,
-          posterPath: movie.poster_path,
-          movieId: movie.id
-        }))
+        genreMovieCount: moviesWithCount.movieCount,
+        genreMovies: moviesWithCount.movies
       });
+      
     }
     return result;
 }
@@ -92,7 +91,7 @@ async function getMovieInfo(movieId) {
             description: data.overview,
             releaseYear: releaseYear,
             genreNames: genreNames,
-            cover: data.poster_path,
+            posterPath: data.poster_path,
             actors: actorsAndDirectors.actors,
             directors: actorsAndDirectors.directors
         }
@@ -131,16 +130,16 @@ async function getActorsAndDirector(movieId) {
         console.error("Error fetching genres:", err);
         return null
     }
-
-
 }
+
+
+
 
 
 
 module.exports = {
     getGenres,
-    getMovies,
-    getMovieCount,
+    getMoviesWithCount,
     getGenresWithMovies,
     getMovieInfo
 }

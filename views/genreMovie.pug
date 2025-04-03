@@ -1,0 +1,9 @@
+include includes/header.pug
+body 
+    h2 #{genre.genreName} (#{movieCount} movies in total)
+    .movies
+        each movie in movies
+            .movie(style="display:inline-block;text-align:center;margin:10px" id=`${movie.movieId}`)
+                img(src=`https://image.tmdb.org/t/p/w500${movie.posterPath}`, alt=movie.title, width="150")
+                p #{movie.title}
+        button.button(id=`loadMoreMovies${genre.genreId}`) Load more movies
