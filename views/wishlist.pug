@@ -1,0 +1,8 @@
+include includes/header.pug
+body 
+    h1 Wishlist
+    .movies
+        each movie in movies
+            .movie(id=`${movie.id}`)
+                img(src=`https://image.tmdb.org/t/p/w500${movie.posterPath}`, alt=movie.title)
+                p #{movie.title}

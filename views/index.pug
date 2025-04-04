@@ -1,8 +1,9 @@
 include includes/header.pug
 body
     h1 Movies
+    button.button(id="goToWishlistButton") Go to wishlist
     each genre in genres
-        .genre-header
+        .genreTitle
             h2 #{genre.genreName} (#{genre.genreMovieCount} movies in total)
             button.button.viewAllMoviesButton(id=`viewAllMovies${genre.genreId}` name=`${genre.genreName}`) View all movies
         

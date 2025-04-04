@@ -1,0 +1,17 @@
+.movie {
+    width: 300px;
+   
+}
+
+.movies {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* centers movie cards */
+    gap: 20px;               /* optional spacing between movies */
+    
+  }
+
+.buttonWrapper {
+    display: flex;
+    justify-content: center;
+}

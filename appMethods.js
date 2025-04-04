@@ -1,5 +1,8 @@
 require('dotenv').config();
 const fetch = require('node-fetch');
+const fs = require('fs');
+const path = require('path');
+const wishlistFile = path.join(__dirname, 'wishlist.json');
 
 const fetchOptionsGet = {
     method: 'GET',
@@ -24,13 +27,13 @@ async function getGenres() {
     }
 }
 
-async function getMoviesWithCount(genreId, amount = 10) {
-    const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=${genreId}`;
+async function getMoviesWithCount(genreId, page = 1) {
+    const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&with_genres=${genreId}`;
     try {
         const res = await fetch(url, fetchOptionsGet);
         
         const data = await res.json();
-        let movies = data.results.slice(0, amount);
+        let movies = data.results
         
         movies = movies.map(movie => ({
             title: movie.title,
@@ -86,6 +89,7 @@ async function getMovieInfo(movieId) {
         const actorsAndDirectors = await getActorsAndDirector(movieId)
 
         const movieInfo = {
+            id: movieId,
             title: data.title,
             backdropPath: data.backdrop_path,
             description: data.overview,
@@ -100,8 +104,6 @@ async function getMovieInfo(movieId) {
         console.error("Error fetching genres:", err);
         return null
     }
-
-
 }
 
 async function getActorsAndDirector(movieId) {
@@ -132,6 +134,42 @@ async function getActorsAndDirector(movieId) {
     }
 }
 
+function getWishlistMovies() {
+    if (!fs.existsSync(wishlistFile)) {
+        return []; 
+    }
+    
+    const data = fs.readFileSync(wishlistFile, 'utf-8');
+    try {
+        const wishlist = JSON.parse(data);
+        return wishlist;
+    } catch (err) {
+        console.error("Error parsing wishlist file:", err);
+        return [];
+    }
+
+}
+
+//Creates a file in the root if it doesnt exit and adds the movie else adds the movie to the existing file
+function saveMovieToWishlist(id, title, posterPath) {
+    let wishlist = [];
+
+  // If the file exists, read it
+  if (fs.existsSync(wishlistFile)) {
+    const data = fs.readFileSync(wishlistFile);
+    wishlist = JSON.parse(data);
+  }
+
+  // Check if movie is already in wishlist
+  const exists = wishlist.some(movie => movie.id === id);
+
+  if (!exists) {
+    wishlist.push({ id, title, posterPath });
+    fs.writeFileSync(wishlistFile, JSON.stringify(wishlist, null, 2));
+  }
+
+}
+
 
 
 
@@ -141,5 +179,7 @@ module.exports = {
     getGenres,
     getMoviesWithCount,
     getGenresWithMovies,
-    getMovieInfo
+    getMovieInfo,
+    saveMovieToWishlist,
+    getWishlistMovies
 }

@@ -1,22 +1,22 @@
 
-body {
-    font-family: sans-serif;
-    background: linear-gradient(to bottom right, #0b1c2c, #14273d);
-    color: #f0f0f0;
-    padding: 30px;
-}
+
   
 
 
-h1 {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 40px;
+
+
+#goToWishlistButton {
+    float: right;
+    display: block;
 }
 
-.genre-header, .movies, .secondRowMovies {
+.genreTitle, .movies, .secondRowMovies {
     display: flex;
-    gap: 20px;
+    gap: 30px;
+}
+
+.genreTitle {
+    margin-top: 50px;
 }
  
  
@@ -27,11 +27,7 @@ h1 {
 }
   
   
-.movie img {
-    width: 100%;
-    border-radius: 8px;
-    transition: transform 0.2s ease-in-out;
-}
+
   
   
 .movie img:hover {
@@ -40,26 +36,20 @@ h1 {
   
   
 .movie p {
-    margin-top: 4px;
+    margin-top: 10px;
 }
 
 
 
-.button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.2s ease-in-out;
+
+
+.viewAllMoviesButton {
+    margin-bottom: 15px;
+    margin-top: 15px;
 }
   
   
-.button:hover {
-    background-color: #0056b3;
-}
+
   
 
 .movie.hidden {

@@ -1,6 +1,19 @@
 
-const viewAllMoviesButtons = document.querySelectorAll(".viewAllMoviesButton")
-viewAllMoviesButtons.forEach(button => button.addEventListener("click", displayAllGenreMovies))
+function addInitialEventlisteners() {
+    const viewAllMoviesButtons = document.querySelectorAll(".viewAllMoviesButton")
+    viewAllMoviesButtons.forEach(button => button.addEventListener("click", displayAllGenreMovies))
+
+    const loadMoreMoviesButtons = document.querySelectorAll(".loadMoreButton")
+    loadMoreMoviesButtons.forEach(button => {
+        button.addEventListener("click", hideLoadMoreButton)
+    })
+
+    const goToWishlistButton = document.getElementById("goToWishlistButton")
+    goToWishlistButton.addEventListener('click', goToWishlist)
+
+}
+
+
 
 function displayAllGenreMovies() {
     const genreId = this.id.replace("viewAllMovies", "");
@@ -8,11 +21,7 @@ function displayAllGenreMovies() {
     window.location.href = `/genreMovie?id=${genreId}&name=${genreName}`;
 }
 
-const loadMoreMoviesButtons = document.querySelectorAll(".loadMoreButton")
 
-loadMoreMoviesButtons.forEach(button => {
-    button.addEventListener("click", hideLoadMoreButton)
-})
 
 function hideLoadMoreButton() {
     const genreId = this.dataset.genreId;
@@ -25,3 +34,9 @@ function hideLoadMoreButton() {
     this.style.display = "none";
 
 }
+
+function goToWishlist() {
+    window.location.href = '/wishlist'
+}
+
+addInitialEventlisteners()
