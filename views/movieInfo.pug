@@ -9,8 +9,11 @@ body.movieInfoPage(style=`background-image: url("https://image.tmdb.org/t/p/orig
         p Genres: #{movieInfo.genreNames}
         p Directors: #{movieInfo.directors}
         p Actors: #{movieInfo.actors}
-    .movie
-        img(src=`https://image.tmdb.org/t/p/w500${movieInfo.posterPath}`, alt=`Cover of ${movieInfo.title}`, width="150")
+    .coverAndTrailer    
+        .movie
+            img(src=`https://image.tmdb.org/t/p/w500${movieInfo.posterPath}`, alt=`Cover of ${movieInfo.title}`)
+        if movieInfo.trailerKey
+            iframe(width="550", height="309", src=`https://www.youtube.com/embed/${movieInfo.trailerKey}`, frameborder="0", allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture", allowfullscreen)
     if inWishlist
         button.button#removeFromWishlistButton(data-movie-id=`${movieInfo.id}` style="display: inline-block;") Remove from Wishlist
         button.button#saveToWishlistButton(data-movie-id=`${movieInfo.id}` data-movie-title=`${movieInfo.title}` data-movie-poster-path=`${movieInfo.posterPath}` style="display: none;") Save to Wishlist

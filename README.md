@@ -13,6 +13,7 @@ Built with **Node.js**, **Express**, **Pug**, and styled using **vanilla CSS** w
   - Title, description, release year, genres
   - Actors and directors
   - Movie poster and backdrop
+  - 🎬 Embedded YouTube trailer
 - ❤️ Add or remove movies from a local wishlist
 - 📄 Wishlist stored in a local JSON file (`wishlist.json`)
 - 📱 Responsive layout for mobile and desktop

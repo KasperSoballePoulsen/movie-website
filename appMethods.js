@@ -57,7 +57,7 @@ async function getMoviesWithCount(genreId, page = 1, moviesAmount = 20) {
         
         return moviesWithCount 
     } catch (error) {
-        console.error("Error fetching genres:", error)
+        console.error("Error:", error)
         return null
     }     
 }
@@ -96,6 +96,8 @@ async function getMovieInfo(movieId) {
 
         const actorsAndDirectors = await getActorsAndDirector(movieId)
 
+        const trailerKey = await getMovieTrailerKey(movieId)
+
         const movieInfo = {
             id: movieId,
             title: data.title,
@@ -105,11 +107,12 @@ async function getMovieInfo(movieId) {
             genreNames: genreNames,
             posterPath: data.poster_path,
             actors: actorsAndDirectors.actors,
-            directors: actorsAndDirectors.directors
+            directors: actorsAndDirectors.directors,
+            trailerKey: trailerKey
         }
         return movieInfo
     } catch (error) {
-        console.error("Error fetching genres:", error)
+        console.error("Error:", error)
         return null
     }
 }
@@ -140,7 +143,7 @@ async function getActorsAndDirector(movieId) {
         
         return actorsAndDirectors
     } catch (error) {
-        console.error("Error fetching genres:", error)
+        console.error("Error:", error)
         return null
     }
 }
@@ -199,6 +202,21 @@ function isInWishlist(movieId) {
   return isInWishlist
 }
 
+//Gets the trailerkey used to find trailer on youtube
+async function getMovieTrailerKey(movieId) {
+    const url = `https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`
+    try {
+        const res = await fetch(url, fetchOptionsGet)
+        const data = await res.json()
+        const results = data.results || []
+        const trailerElement = results.find(element => element.type === "Trailer" && element.site === "YouTube")
+        const trailerKey = trailerElement.key
+        return trailerKey
+    } catch (error) {
+        console.error("Error:", error)
+        return null
+    }
+}
 
 
 

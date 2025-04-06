@@ -1,6 +1,6 @@
 
 .movie {
-    width: 150px;
+    width: 200px;
 }
 
 /* Wishlist action buttons spacing top */
@@ -12,7 +12,8 @@
 #backArrow {
     font-size: 50px;
     user-select: none;
-    cursor: pointer;   
+    cursor: pointer;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 /* creating see through box*/
@@ -20,12 +21,20 @@
     background-color: rgba(0, 0, 0, 0.5);
     padding: 10px;
     margin-bottom: 5px;
+    border-radius: 8px;
 }
 
-/* Styling for movie info page background and text */
+/* setting background */
 .movieInfoPage {
     background-size: cover;
     background-position: center;
     color: white;
     padding: 20px;
+}
+
+
+.coverAndTrailer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
 }
