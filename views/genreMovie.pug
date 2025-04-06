@@ -1,5 +1,6 @@
 include includes/header.pug
-body 
+body
+    span(id="backArrow") ←
     h1 #{genre.genreName} (#{movieCount} movies in total)
     .movies
         each movie in movies

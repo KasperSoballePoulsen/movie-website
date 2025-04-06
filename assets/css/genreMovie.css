@@ -1,17 +1,35 @@
+/* Individual movie box */
 .movie {
     width: 300px;
+    cursor: pointer;
+    text-align: center;
    
 }
 
+/* Container for movie boxes */
 .movies {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* centers movie cards */
-    gap: 20px;               /* optional spacing between movies */
+    justify-content: center; 
+    gap: 20px;               
     
   }
 
+/*center load more button*/
 .buttonWrapper {
     display: flex;
     justify-content: center;
 }
+
+/* Hover effect on movie images */
+.movie img:hover {
+    transform: scale(1.05);
+}
+
+/* Styling for back arrow icon */
+#backArrow {
+    font-size: 50px;
+    user-select: none;
+    cursor: pointer;   
+}
+

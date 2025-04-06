@@ -1,33 +1,36 @@
 # 🎬 Movie Website – TMDB API Integration
 
-This project is a movie browsing web application that demonstrates how to fetch and display movie data using [The Movie Database (TMDB)](https://www.themoviedb.org/) API. It is built with **Node.js**, **Express**, **Pug**, and uses **dotenv** to securely handle API tokens.
+This project is a movie browsing web application that uses [The Movie Database (TMDB)](https://www.themoviedb.org/) API to fetch and display movies by genre. Users can explore popular movies, view detailed information, and save favorites to a personal wishlist.
+
+Built with **Node.js**, **Express**, **Pug**, and styled using **vanilla CSS** with mobile responsiveness in mind.
 
 ---
 
 ## 📌 Features
 
-- Fetches and displays a selection of movie genres
-- Displays the most popular movies from each genre
-- Users can click on a movie to view detailed information
-- Information includes:
-  - Title
-  - Description
-  - Release year
-  - Genres
-  - Directors
-  - Actors
-  - Backdrop image
+- 🎥 Browse popular movies by genre
+- 🔎 View detailed info about each movie:
+  - Title, description, release year, genres
+  - Actors and directors
+  - Movie poster and backdrop
+- ❤️ Add or remove movies from a local wishlist
+- 📄 Wishlist stored in a local JSON file (`wishlist.json`)
+- 📱 Responsive layout for mobile and desktop
+- 🚀 "Load more" button to dynamically fetch more movies
 
 ---
 
 ## 🔧 Technologies Used
 
-- Node.js
-- Express.js
-- Pug (for templating)
-- Fetch API (via node-fetch)
-- The Movie Database (TMDB) API
-- dotenv (for secure API token handling)
+- **Node.js**
+- **Express.js**
+- **Pug** (templating engine)
+- **TMDB API** (movie data)
+- **dotenv** (for API token handling)
+- **node-fetch** (for server-side API calls)
+- **Vanilla JavaScript** (for interactivity)
+- **CSS** (custom responsive styling)
+- **File System module** (`fs`) for saving the wishlist
 
 ---
 
@@ -36,26 +39,34 @@ This project is a movie browsing web application that demonstrates how to fetch 
 ```bash
 movie-website/
 │
-├── app.js                     
-├── appMethods.js              
-├── .env                       
+├── app.js                     # Express server setup
+├── appMethods.js              # API and wishlist logic
+├── wishlist.json              # Local storage of wishlist movies
+├── .env                       # Environment file for TMDB token
 ├── package.json               
 │
-├── views/                     
-│   ├── index.pug              
-│   ├── movieInfo.pug          
+├── views/                     # Pug templates
+│   ├── index.pug              # Frontpage with genres and movies
+│   ├── genreMovie.pug         # Full genre-specific movie page
+│   ├── movieInfo.pug          # Detailed movie info page
+│   ├── wishlist.pug           # Wishlist page
 │   └── includes/
-│       └── header.pug         
+│       └── header.pug         # Reusable layout/header
 │
-├── assets/                    
-│   ├── js/
+├── assets/
+│   ├── js/                    # Frontend JavaScript
 │   │   ├── index.js
-│   │   └── movieInfo.js
-│   └── css/
+│   │   ├── genreMovie.js
+│   │   ├── movieInfo.js
+│   │   └── sharedUtils.js
+│   └── css/                   # Stylesheets
 │       ├── frontpage.css
-│       └── movieInfo.css
+│       ├── genreMovie.css
+│       ├── movieInfo.css
+│       ├── wishlist.css
+│       └── generalLayout.css
 │
-└── README.md       
+└── README.md                  # Project documentation    
 ```
 
 ---

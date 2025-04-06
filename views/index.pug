@@ -16,10 +16,8 @@ body
                 .movie(id=`${movie.movieId}`)
                     img(src=`https://image.tmdb.org/t/p/w500${movie.posterPath}`, alt=movie.title)
                     p #{movie.title}
-        .secondRowMovies    
-            // Second half, initially hidden
             each movie in secondHalf
                 .movie.hidden(data-genre-id=`${genre.genreId}` id=`${movie.movieId}`)
                     img(src=`https://image.tmdb.org/t/p/w500${movie.posterPath}`, alt=movie.title)
                     p #{movie.title}
-            button.button.loadMoreButton(id=`loadMoreMovies${genre.genreId}` data-genre-id=`${genre.genreId}`) Load more movies
+        button.button.loadMoreButton(id=`loadMoreMovies${genre.genreId}` data-genre-id=`${genre.genreId}`) Load more movies

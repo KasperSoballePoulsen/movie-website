@@ -1,9 +1,15 @@
-require('dotenv').config();
-const fetch = require('node-fetch');
-const fs = require('fs');
-const path = require('path');
-const wishlistFile = path.join(__dirname, 'wishlist.json');
+// Load environment variables from .env file
+require('dotenv').config()
 
+// Import modules
+const fetch = require('node-fetch')
+const fs = require('fs')
+const path = require('path')
+
+// Define path to the local wishlist file
+const wishlistFile = path.join(__dirname, 'wishlist.json')
+
+// Reusable options for fetch requests to TMDB API
 const fetchOptionsGet = {
     method: 'GET',
     headers: {
@@ -12,29 +18,31 @@ const fetchOptionsGet = {
     }
 }
 
-
+// Fetch and return selected genres from TMDB
 async function getGenres() {
     const genreFilter = ["Action", "Comedy", "Thriller", "War", "Romance", "Drama", "Crime", "Documentary", "Horror"]
     const url = 'https://api.themoviedb.org/3/genre/movie/list?language=en'
     try {
         const res = await fetch(url, fetchOptionsGet)
         const data = await res.json()
-        const genres = data.genres.filter(genre => genreFilter.includes(genre.name));
+        const genres = data.genres.filter(genre => genreFilter.includes(genre.name))
         return genres
-    } catch (err) {
-        console.error("Error fetching genres:", err);
+    } catch (error) {
+        console.error("Error fetching genres:", error)
         return null
     }
 }
 
-async function getMoviesWithCount(genreId, page = 1) {
+// Fetch movies for a specific genre + total count of movies in that genre
+async function getMoviesWithCount(genreId, page = 1, moviesAmount = 20) {
     const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&with_genres=${genreId}`;
     try {
         const res = await fetch(url, fetchOptionsGet);
         
         const data = await res.json();
-        let movies = data.results
+        let movies = data.results.slice(0,moviesAmount)
         
+        // Extract relevant movie data
         movies = movies.map(movie => ({
             title: movie.title,
             posterPath: movie.poster_path,
@@ -48,34 +56,34 @@ async function getMoviesWithCount(genreId, page = 1) {
 
         
         return moviesWithCount 
-    } catch (err) {
-        console.error("Error fetching genres:", err);
+    } catch (error) {
+        console.error("Error fetching genres:", error)
         return null
     }     
 }
 
-
+// Fetch genres and their first 14 movies
 async function getGenresWithMovies() {
-    const genres = await getGenres();
+    const genres = await getGenres()
     
-    const result = [];
-    for (const genre of genres) {
-      
-      
-      const moviesWithCount = await getMoviesWithCount(genre.id);
-  
-      result.push({
-        genreName: genre.name,
-        genreId: genre.id,
-        genreMovieCount: moviesWithCount.movieCount,
-        genreMovies: moviesWithCount.movies
-      });
-      
+    const result = []
+    if (genres !== null) {
+        for (const genre of genres) {
+            const moviesWithCount = await getMoviesWithCount(genre.id, 1, 14)
+        
+            result.push({
+              genreName: genre.name,
+              genreId: genre.id,
+              genreMovieCount: moviesWithCount.movieCount,
+              genreMovies: moviesWithCount.movies
+            });
+
+        }
     }
-    return result;
+    return result
 }
 
-
+// Fetch movie info from TMDB by movie ID
 async function getMovieInfo(movieId) {
     const url = `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`
     try {
@@ -84,7 +92,7 @@ async function getMovieInfo(movieId) {
 
         const releaseYear = data.release_date.split("-")[0]
 
-        const genreNames = data.genres.map(genre => genre.name).join(", ") + ".";
+        const genreNames = data.genres.map(genre => genre.name).join(", ") + "."
 
         const actorsAndDirectors = await getActorsAndDirector(movieId)
 
@@ -100,26 +108,29 @@ async function getMovieInfo(movieId) {
             directors: actorsAndDirectors.directors
         }
         return movieInfo
-    } catch (err) {
-        console.error("Error fetching genres:", err);
+    } catch (error) {
+        console.error("Error fetching genres:", error)
         return null
     }
 }
 
+// Fetch actors + directors from TMDB
 async function getActorsAndDirector(movieId) {
     const url = `https://api.themoviedb.org/3/movie/${movieId}/credits`
     try {
         const res = await fetch(url, fetchOptionsGet)
         const data = await res.json()
 
+        // Extract names of directors
         const directors = data.crew
             .filter(person => person.job === "Director")
             .map(director => director.name)
-            .join(", ") + ".";
+            .join(", ") + "."
 
+        // Extract names of all actors
         const actors = data.cast
             .map(actor => actor.name)
-            .join(", ") + ".";
+            .join(", ") + "."
 
 
         const actorsAndDirectors = {
@@ -128,58 +139,76 @@ async function getActorsAndDirector(movieId) {
         }
         
         return actorsAndDirectors
-    } catch (err) {
-        console.error("Error fetching genres:", err);
+    } catch (error) {
+        console.error("Error fetching genres:", error)
         return null
     }
 }
 
+// Read and return wishlist from local JSON file
 function getWishlistMovies() {
     if (!fs.existsSync(wishlistFile)) {
-        return []; 
+        return []
     }
     
-    const data = fs.readFileSync(wishlistFile, 'utf-8');
+    const data = fs.readFileSync(wishlistFile, 'utf-8')
     try {
-        const wishlist = JSON.parse(data);
-        return wishlist;
-    } catch (err) {
-        console.error("Error parsing wishlist file:", err);
-        return [];
+        const wishlist = JSON.parse(data)
+        return wishlist
+    } catch (error) {
+        console.error("Error parsing wishlist file:", error)
+        return []
     }
 
 }
 
-//Creates a file in the root if it doesnt exit and adds the movie else adds the movie to the existing file
+// Save a movie to the wishlist (creates file if it doesn't exist)
 function saveMovieToWishlist(id, title, posterPath) {
-    let wishlist = [];
 
-  // If the file exists, read it
+    const wishlist = getWishlistMovies()
+  
+    // Check if movie is already in wishlist
+    const exists = wishlist.some(movie => movie.id === id)
+  
+    if (!exists) {
+      wishlist.push({ id, title, posterPath })
+      fs.writeFileSync(wishlistFile, JSON.stringify(wishlist, null, 2))
+    }
+}
+
+
+// Remove a movie from the wishlist by ID
+function removeMovieFromWishlist(movieId) {
+    const wishlist = getWishlistMovies()
+    const updatedWishlist = wishlist.filter(movie => movie.id !== movieId)
+    fs.writeFileSync(wishlistFile, JSON.stringify(updatedWishlist, null, 2))
+}
+
+// Check if a movie is in the wishlist
+function isInWishlist(movieId) {
+    let isInWishlist = false
+
   if (fs.existsSync(wishlistFile)) {
-    const data = fs.readFileSync(wishlistFile);
-    wishlist = JSON.parse(data);
+    const data = fs.readFileSync(wishlistFile, 'utf-8')
+    const wishlist = JSON.parse(data)
+
+    // Compare using Number(movieId) to avoid type mismatch
+    isInWishlist = wishlist.some(movie => movie.id === movieId)
   }
 
-  // Check if movie is already in wishlist
-  const exists = wishlist.some(movie => movie.id === id);
-
-  if (!exists) {
-    wishlist.push({ id, title, posterPath });
-    fs.writeFileSync(wishlistFile, JSON.stringify(wishlist, null, 2));
-  }
-
+  return isInWishlist
 }
 
 
 
 
-
-
+// Export the functions that are used by the server
 module.exports = {
-    getGenres,
     getMoviesWithCount,
     getGenresWithMovies,
     getMovieInfo,
     saveMovieToWishlist,
-    getWishlistMovies
+    getWishlistMovies,
+    removeMovieFromWishlist,
+    isInWishlist
 }

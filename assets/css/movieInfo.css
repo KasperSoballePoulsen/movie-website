@@ -1,7 +1,31 @@
+
 .movie {
     width: 150px;
 }
 
-#saveToWishlistButton {
+/* Wishlist action buttons spacing top */
+#saveToWishlistButton, #removeFromWishlistButton {
     margin-top: 30px;
+}
+
+/* Back arrow icon */
+#backArrow {
+    font-size: 50px;
+    user-select: none;
+    cursor: pointer;   
+}
+
+/* creating see through box*/
+.movieInfoBox {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+/* Styling for movie info page background and text */
+.movieInfoPage {
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 20px;
 }
