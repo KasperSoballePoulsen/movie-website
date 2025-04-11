@@ -32,6 +32,7 @@ Built with **Node.js**, **Express**, **Pug**, and styled using **vanilla CSS** w
 - **Vanilla JavaScript** (for interactivity)
 - **CSS** (custom responsive styling)
 - **File System module** (`fs`) for saving the wishlist
+- **JSON** (data format used for API communication and local storage)
 
 ---
 

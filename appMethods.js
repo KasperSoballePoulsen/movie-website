@@ -18,10 +18,12 @@ const fetchOptionsGet = {
     }
 }
 
+const urlStart = 'https://api.themoviedb.org/3'
+
 // Fetch and return selected genres from TMDB
 async function getGenres() {
     const genreFilter = ["Action", "Comedy", "Thriller", "War", "Romance", "Drama", "Crime", "Documentary", "Horror"]
-    const url = 'https://api.themoviedb.org/3/genre/movie/list?language=en'
+    const url = `${urlStart}/genre/movie/list?language=en`
     try {
         const res = await fetch(url, fetchOptionsGet)
         const data = await res.json()
@@ -35,7 +37,7 @@ async function getGenres() {
 
 // Fetch movies for a specific genre + total count of movies in that genre
 async function getMoviesWithCount(genreId, page = 1, moviesAmount = 20) {
-    const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&with_genres=${genreId}`;
+    const url = `${urlStart}/discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&with_genres=${genreId}`;
     try {
         const res = await fetch(url, fetchOptionsGet);
         
@@ -85,7 +87,7 @@ async function getGenresWithMovies() {
 
 // Fetch movie info from TMDB by movie ID
 async function getMovieInfo(movieId) {
-    const url = `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`
+    const url = `${urlStart}/movie/${movieId}?language=en-US`
     try {
         const res = await fetch(url, fetchOptionsGet)
         const data = await res.json()
@@ -119,7 +121,7 @@ async function getMovieInfo(movieId) {
 
 // Fetch actors + directors from TMDB
 async function getActorsAndDirector(movieId) {
-    const url = `https://api.themoviedb.org/3/movie/${movieId}/credits`
+    const url = `${urlStart}/movie/${movieId}/credits`
     try {
         const res = await fetch(url, fetchOptionsGet)
         const data = await res.json()
@@ -204,7 +206,7 @@ function isInWishlist(movieId) {
 
 //Gets the trailerkey used to find trailer on youtube
 async function getMovieTrailerKey(movieId) {
-    const url = `https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`
+    const url = `${urlStart}/movie/${movieId}/videos?language=en-US`
     try {
         const res = await fetch(url, fetchOptionsGet)
         const data = await res.json()
